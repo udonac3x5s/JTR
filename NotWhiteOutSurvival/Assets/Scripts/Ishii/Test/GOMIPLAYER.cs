@@ -13,6 +13,14 @@ public class GOMIPLAYER : MonoBehaviour
 
     private Vector3 moveDirection; // 移動方向
 
+    Animator animator; // プレイヤーのアニメーター
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+
     private void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -25,5 +33,14 @@ public class GOMIPLAYER : MonoBehaviour
         }
 
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
+    
+        if (moveDirection != Vector3.zero)
+        {
+            animator.SetBool("Running", true);
+        }
+        else
+        {
+            animator.SetBool("Running", false);
+        }
     }
 }

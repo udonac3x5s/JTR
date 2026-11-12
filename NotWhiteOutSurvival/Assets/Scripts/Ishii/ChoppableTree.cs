@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using Common;
 
 /// <summary>
 /// 木のPrefabのルートに付ける。
 /// 子に TreeArea(エリア) と TreeTrunk(幹) を置く。
+/// 切り倒すとアイテムを周りにばらまく。
 /// </summary>
 public class ChoppableTree : MonoBehaviour
 {
@@ -14,9 +14,14 @@ public class ChoppableTree : MonoBehaviour
     [Tooltip("何回当てたら切り倒せるか")]
     [SerializeField] private int hitsToChop = 1;
 
-    [Header("報酬")]
-    [SerializeField] private ItemType rewardItem = ItemType.Wood;
-    [SerializeField] private int rewardAmount = 3;
+    [Header("ドロップ")]
+    [Tooltip("落とすアイテムのPrefab(薪など)")]
+    [SerializeField] private ItemPickup dropPrefab;
+    [SerializeField] private int dropCount = 3;
+    [Tooltip("アイテムが飛び出す高さ(木の根元から)")]
+    [SerializeField] private float dropOriginHeight = 1f;
+    [SerializeField] private float scatterMinRadius = 1f;
+    [SerializeField] private float scatterMaxRadius = 2f;
 
     [Header("切り倒した後")]
     [Tooltip("0以下なら復活しない")]
@@ -63,15 +68,17 @@ public class ChoppableTree : MonoBehaviour
         hp--;
         onHit?.Invoke();
 
-        if (hp <= 0) Chop(by);
+        if (hp <= 0) Chop();
     }
 
-    private void Chop(PlayerAxe by)
+    private void Chop()
     {
         IsChopped = true;
 
-        if (by != null && by.Inventory != null)
-            by.Inventory.AddItem(rewardItem, rewardAmount);
+        Vector3 ground = transform.position;
+        ItemDropper.Drop(dropPrefab, dropCount,
+            ground + Vector3.up * dropOriginHeight, ground,
+            scatterMinRadius, scatterMaxRadius);
 
         // コライダーを無効にすると OnTriggerExit が来ないので自分で抜けさせる
         foreach (var p in playersInArea) p.ExitTree(this);
@@ -98,4 +105,13 @@ public class ChoppableTree : MonoBehaviour
         foreach (var c in treeColliders)
             if (c != null) c.enabled = active;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0.6f, 0.4f, 0.2f, 0.8f);
+        Gizmos.DrawWireSphere(transform.position, scatterMinRadius);
+        Gizmos.DrawWireSphere(transform.position, scatterMaxRadius);
+    }
+#endif
 }

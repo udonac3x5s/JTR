@@ -48,8 +48,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChoppableTree
   hitsToChop: 4
-  rewardItem: 0
-  rewardAmount: 3
+  dropPrefab: {fileID: 4715858889126770274, guid: 6723b4e80a6411242ba5cc51e5ac41e8, type: 3}
+  dropCount: 3
+  dropOriginHeight: 1
+  scatterMinRadius: 1
+  scatterMaxRadius: 2
   respawnTime: 10
   visual: {fileID: 7167467003872584556}
   treeColliders: []

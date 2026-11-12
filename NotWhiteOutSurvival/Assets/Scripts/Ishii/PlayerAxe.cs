@@ -62,6 +62,10 @@ public class PlayerAxe : MonoBehaviour
         tree.Hit(this);
     }
 
+    /// <summary>
+    /// プレイヤーが近くの木に対して斧を振り続ける処理
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator SwingLoop()
     {
         while (IsNearTree)
