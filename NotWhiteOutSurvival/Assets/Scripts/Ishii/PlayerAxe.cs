@@ -11,7 +11,7 @@ public class PlayerAxe : MonoBehaviour
     [Header("参照")]
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] private AxeHitbox axeHitbox;
-    [Tooltip("木の近くにいるときだけ表示する斧のモデル(任意)")]
+    [Tooltip("木の近くで表示を開始する斧のモデル(任意)")]
     [SerializeField] private GameObject axeVisual;
     [SerializeField] private Animator animator;
     [SerializeField] private string swingTrigger = "Swing";
@@ -83,7 +83,7 @@ public class PlayerAxe : MonoBehaviour
             yield return new WaitForSeconds(rest + swingInterval);
         }
 
-        if (axeVisual != null) axeVisual.SetActive(false);
+        // if (axeVisual != null) axeVisual.SetActive(false);
         swingRoutine = null;
     }
 

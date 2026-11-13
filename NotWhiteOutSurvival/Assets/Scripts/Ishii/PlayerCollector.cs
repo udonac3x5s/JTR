@@ -16,13 +16,19 @@ public class PlayerCollector : MonoBehaviour
     [Tooltip("アイテムが吸い込まれる位置(プレイヤーの足元からの高さ)")]
     [SerializeField] private float collectHeight = 0.8f;
 
-    public Vector3 CollectPoint => transform.position + Vector3.up * collectHeight;
+    [Tooltip("あれば、回収したアイテムを背中の一番上に向かって飛ばす")]
+    [SerializeField] private PlayerBackStack backStack;
+
+    public Vector3 CollectPoint => backStack != null
+        ? backStack.NextSlotPosition
+        : transform.position + Vector3.up * collectHeight;
 
     private readonly Collider[] hits = new Collider[32];
 
     private void Awake()
     {
         if (inventory == null) inventory = GetComponent<PlayerInventory>();
+        if (backStack == null) backStack = GetComponent<PlayerBackStack>();
     }
 
     private void Update()
