@@ -16,7 +16,7 @@ public class CustomerMoveTest : MonoBehaviour
     private Transform[] waypointsBToC;
 
     [Header("移動設定")]
-    [SerializeField, Min(0.01f)] private float moveSpeed = 2f;
+    [SerializeField, Min(0.01f)] private float moveSpeed = 5f;
     [SerializeField, Min(0f)] private float rotationSpeed = 360f;
     [SerializeField] private float rotationOffsetY = 0f;
     [SerializeField] private bool returnToAAfterC = false;
@@ -249,7 +249,12 @@ public class CustomerMoveTest : MonoBehaviour
         else if (state == MoveState.ToC)
         {
             currentState = "C に到着";
-            if (returnToAAfterC)
+
+            bool shouldReturn = managedByQueue
+                ? queueManager != null && queueManager.ReturnCustomersToA
+                : returnToAAfterC;
+
+            if (shouldReturn)
             {
                 if (managedByQueue)
                 {
