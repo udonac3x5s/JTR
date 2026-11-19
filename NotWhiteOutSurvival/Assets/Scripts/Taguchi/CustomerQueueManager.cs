@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Common;
 
 public class CustomerQueueManager : MonoBehaviour
 {
@@ -9,6 +10,51 @@ public class CustomerQueueManager : MonoBehaviour
     [SerializeField] private CustomerMoveTest customerPrefab;
     [SerializeField, Min(1)] private int spawnCount = 5;
     [SerializeField, Min(0.01f)] private float spawnInterval = 1f;
+
+    [Header("商人NPCの移動・回転（全員共通）")]
+    [SerializeField, Min(0.01f)] private float moveSpeed = 5f;
+    [SerializeField, Min(0f)] private float rotationSpeed = 360f;
+    [SerializeField] private float rotationOffsetY = 0f;
+
+    public float MoveSpeed => Mathf.Max(0.01f, moveSpeed);
+    public float RotationSpeed => Mathf.Max(0f, rotationSpeed);
+    public float RotationOffsetY => rotationOffsetY;
+
+    [Header("商人NPCの注文設定（全員共通）")]
+    [SerializeField, Min(1)] private int orderLevel = 1;
+    [SerializeField]
+    private List<CustomerMoveTest.OrderLevelSettings> orderLevels =
+        new List<CustomerMoveTest.OrderLevelSettings>
+        {
+            new CustomerMoveTest.OrderLevelSettings
+            {
+                minKinds = 1,
+                maxKinds = 1,
+                candidates = new List<CustomerMoveTest.OrderCandidate>
+                {
+                    new CustomerMoveTest.OrderCandidate(ItemType.Wood, 1, 3)
+                }
+            },
+            new CustomerMoveTest.OrderLevelSettings
+            {
+                minKinds = 1,
+                maxKinds = 2,
+                candidates = new List<CustomerMoveTest.OrderCandidate>
+                {
+                    new CustomerMoveTest.OrderCandidate(ItemType.Wood, 2, 5),
+                    new CustomerMoveTest.OrderCandidate(ItemType.Meat, 1, 3)
+                }
+            }
+        };
+
+    public int OrderLevel => Mathf.Max(1, orderLevel);
+    public IReadOnlyList<CustomerMoveTest.OrderLevelSettings> OrderLevels => orderLevels;
+
+    // レベルは次にNPCがAから出発する際の注文抽選から反映される。
+    public void SetOrderLevel(int level)
+    {
+        orderLevel = Mathf.Max(1, level);
+    }
 
     [Header("木こりNPC")]
     [SerializeField] private GameObject woodcutterPrefab;
@@ -238,6 +284,16 @@ public class CustomerQueueManager : MonoBehaviour
 
         if (first != null && first.IsWaitingAtB)
             first.hasReceivedItem = true;
+    }
+
+    // 既存のCommon.ItemTypeで在庫から先頭NPCへ渡す。
+    public int TryDeliverToFirst(ItemType itemType, int count = 1)
+    {
+        if (waitingLine.Count == 0 || waitingLine[0] == null ||
+            !waitingLine[0].IsWaitingAtB)
+            return 0;
+
+        return waitingLine[0].TryDeliverItem(itemType, count);
     }
 
     private static Vector3[] BuildRoute(
