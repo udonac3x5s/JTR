@@ -72,6 +72,8 @@ public class WoodcutterMove : MonoBehaviour
         direction.y = 0f;
         float distance = direction.magnitude;
 
+
+
         // 正面を木に向ける。モデルが逆向きなら Rotation Offset Y を180にする。
         if (distance > 0.001f)
         {
@@ -98,8 +100,15 @@ public class WoodcutterMove : MonoBehaviour
 
         transform.position = Vector3.MoveTowards(
             transform.position, destination, moveSpeed * Time.deltaTime);
+        if (isMoving)
+        {
+            GetComponent<Animator>().SetBool("Running", true);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("Running", false);
+        }
     }
-
     private void SearchTrees()
     {
         trees = FindObjectsOfType<ChoppableTree>();

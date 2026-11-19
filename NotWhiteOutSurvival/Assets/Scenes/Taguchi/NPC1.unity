@@ -401,8 +401,19 @@ MonoBehaviour:
   customerPrefab: {fileID: 819354171760030896, guid: dc018ef53ff6d0c47930e0279081b2ea, type: 3}
   spawnCount: 6
   spawnInterval: 1
+  moveSpeed: 5
+  rotationSpeed: 360
+  rotationOffsetY: 0
+  orderLevel: 1
+  orderLevels:
+  - minKinds: 1
+    maxKinds: 1
+    candidates:
+    - itemType: 0
+      minCount: 1
+      maxCount: 3
   woodcutterPrefab: {fileID: 6993696845037929296, guid: 75d0fc452aeb1ed45aa0dfd71f3f9f1d, type: 3}
-  woodcutterCount: 0
+  woodcutterCount: 1
   spawnIntervalW: 1
   woodcutterSpawnPoint: {fileID: 1294661457}
   woodcutterSpawnSpacing: 1
