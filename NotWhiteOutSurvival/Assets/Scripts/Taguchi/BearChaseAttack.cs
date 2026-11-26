@@ -107,8 +107,7 @@ public class BearChaseAttack : MonoBehaviour
         }
 
         // 向く方向は相手の中心を使用（すでにColliderと重なっていても向ける）。
-        Vector3 lookDirection = target.bounds.center - transform.position;
-        lookDirection.y = 0f;
+        Vector3 lookDirection = GetSurfaceDirection(target);
 
         if (lookDirection.sqrMagnitude > 0.001f)
         {
@@ -166,9 +165,15 @@ public class BearChaseAttack : MonoBehaviour
 
     private Vector3 GetSurfaceDirection(Collider candidate)
     {
-        Vector3 closestPoint = candidate.ClosestPoint(transform.position);
-        Vector3 direction = closestPoint - transform.position;
+        // プレイヤーの親オブジェクトを取得
+        Transform targetTransform = candidate.attachedRigidbody != null
+            ? candidate.attachedRigidbody.transform
+            : candidate.transform.root;
+
+        // プレイヤーの中心位置を基準にする
+        Vector3 direction = targetTransform.position - transform.position;
         direction.y = 0f;
+
         return direction;
     }
 

@@ -41,6 +41,9 @@ public class ChoppableTree : MonoBehaviour
     private int hp;
     private readonly HashSet<PlayerAxe> playersInArea = new HashSet<PlayerAxe>();
 
+    public int CurrentHP => Mathf.Max(0, hp);
+    public int MaxHP => Mathf.Max(1, hitsToChop);
+
     private void Awake()
     {
         hp = hitsToChop;
