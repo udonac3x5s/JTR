@@ -466,15 +466,15 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: e55374f41a25db64585ef76a5b87b6ac, type: 2}
     - target: {fileID: 374437201999350535, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -40.95118
+      value: -0.18128888
       objectReference: {fileID: 0}
     - target: {fileID: 374437201999350535, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 6.2720327
+      value: -16.43911
       objectReference: {fileID: 0}
     - target: {fileID: 374437201999350535, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 87.91309
+      value: 81.38342
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_Name
@@ -486,15 +486,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5785451829565001859, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 1.4080062
+      value: -0.18128888
       objectReference: {fileID: 0}
     - target: {fileID: 5785451829565001859, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -1.1126332
+      value: 16.439106
       objectReference: {fileID: 0}
     - target: {fileID: 5785451829565001859, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -51.91445
+      value: -81.38341
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -527,6 +527,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6c74da68d933635479c15f613f05e064, type: 3}
       insertIndex: -1
       addedObject: {fileID: 478663044}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6c74da68d933635479c15f613f05e064, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 478663047}
   m_SourcePrefab: {fileID: 100100000, guid: 6c74da68d933635479c15f613f05e064, type: 3}
 --- !u!1 &478663036 stripped
 GameObject:
@@ -674,10 +677,40 @@ MonoBehaviour:
   - type: 0
     visualPrefab: {fileID: 65901043416430208, guid: 6723b4e80a6411242ba5cc51e5ac41e8, type: 3}
     itemHeight: 0.4
+  - type: 1
+    visualPrefab: {fileID: 4332701180431361798, guid: e5e461f6bb299ca418931bed5ad24695, type: 3}
+    itemHeight: 0.2
   maxVisible: 30
+  columnSpacing: 2
   followSpeed: 15
   swayAmount: 0.01
   swaySmooth: 6
+--- !u!114 &478663047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478663036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0f18d2ed165694286a0290f7ecbcef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHp: 3
+  invincibleTime: 0.5
+  disableOnDeath: []
+  animator: {fileID: 0}
+  deathTrigger: Dead
+  onHpChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onGameOver:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &502569593
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,7 +848,7 @@ PrefabInstance:
     - target: {fileID: 1782378142834410699, guid: 1cd1fed557c856446a5e2e097d7ba545, type: 3}
       propertyPath: dropPrefab
       value: 
-      objectReference: {fileID: 4715858889126770274, guid: 113bca8c146e979499e4f7c5e735ee1b, type: 3}
+      objectReference: {fileID: 3503869830915351364, guid: e5e461f6bb299ca418931bed5ad24695, type: 3}
     - target: {fileID: 1782378142834410699, guid: 1cd1fed557c856446a5e2e097d7ba545, type: 3}
       propertyPath: hitsToChop
       value: 5
