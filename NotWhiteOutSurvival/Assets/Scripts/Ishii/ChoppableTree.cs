@@ -2,22 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 木のPrefabのルートに付ける。
 /// 子に TreeArea(エリア) と TreeTrunk(幹) を置く。
-/// 切り倒すとアイテムを周りにばらまく。
+/// 斧が当たるたびにアイテムを周りにばらまき、hitsToChop 回当たったら切り倒す。
 /// </summary>
 public class ChoppableTree : MonoBehaviour
 {
     [Header("木こり")]
     [Tooltip("何回当てたら切り倒せるか")]
-    [SerializeField] private int hitsToChop = 1;
+    [SerializeField] private int hitsToChop = 3;
 
     [Header("ドロップ")]
     [Tooltip("落とすアイテムのPrefab(薪など)")]
     [SerializeField] private ItemPickup dropPrefab;
-    [SerializeField] private int dropCount = 3;
+    [Tooltip("斧が当たるたびに落とす個数")]
+    [FormerlySerializedAs("dropCount")]
+    [SerializeField] private int dropCountPerHit = 1;
+    [Tooltip("切り倒した最後の一撃で、さらに追加で落とす個数(0なら追加なし)")]
+    [SerializeField] private int dropCountOnChop = 0;
     [Tooltip("アイテムが飛び出す高さ(木の根元から)")]
     [SerializeField] private float dropOriginHeight = 1f;
     [SerializeField] private float scatterMinRadius = 1f;
@@ -68,6 +73,9 @@ public class ChoppableTree : MonoBehaviour
         hp--;
         onHit?.Invoke();
 
+        // 攻撃が当たるたびにアイテムを散らす
+        DropItems(dropCountPerHit);
+
         if (hp <= 0) Chop();
     }
 
@@ -75,10 +83,8 @@ public class ChoppableTree : MonoBehaviour
     {
         IsChopped = true;
 
-        Vector3 ground = transform.position;
-        ItemDropper.Drop(dropPrefab, dropCount,
-            ground + Vector3.up * dropOriginHeight, ground,
-            scatterMinRadius, scatterMaxRadius);
+        // 最後の一撃だけの追加ドロップ(既定は0)
+        DropItems(dropCountOnChop);
 
         // コライダーを無効にすると OnTriggerExit が来ないので自分で抜けさせる
         foreach (var p in playersInArea) p.ExitTree(this);
@@ -88,6 +94,16 @@ public class ChoppableTree : MonoBehaviour
         onChopped?.Invoke();
 
         if (respawnTime > 0f) StartCoroutine(RespawnRoutine());
+    }
+
+    private void DropItems(int count)
+    {
+        if (count <= 0) return;
+
+        Vector3 ground = transform.position;
+        ItemDropper.Drop(dropPrefab, count,
+            ground + Vector3.up * dropOriginHeight, ground,
+            scatterMinRadius, scatterMaxRadius);
     }
 
     private IEnumerator RespawnRoutine()
